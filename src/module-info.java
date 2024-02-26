@@ -5,4 +5,5 @@
  * 
  */
 module CDShoppingCart {
+	requires junit;
 }
