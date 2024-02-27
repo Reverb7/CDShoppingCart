@@ -1,7 +1,5 @@
 package reverb;
 
-import java.io.Console;
-import java.text.DecimalFormat;
 
 public class ShoppingCartApp 
 {
@@ -13,21 +11,22 @@ public class ShoppingCartApp
 		
 		ShoppingCart cart = new ShoppingCart();
 		Product doveSoap = new Product("Dove Soaps", 39.99);
-		Product niveaSoap = new Product("Nivea Soaps", 40);
-		Product jergens = new Product("Jergens Lotion", 39.99);
+		Product niveaSoap = new Product("Nivea Soaps", 50);
+		Product jergens = new Product("Jergens Lotion", 40);
+		Product axeDeo = new Product("Axe Deo", 99.99);
 		
 		cart.addProduct(doveSoap, 5);
 		cart.addProduct(jergens);
 		cart.addProduct(jergens);
 		cart.displayProducts();
-		
 
 	}
 	
 	// For testing
-	public void console(String name)
+	public static void console(String name)
 	{
 		System.out.println(name);
 	}
+
 
 }

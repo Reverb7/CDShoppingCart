@@ -7,10 +7,53 @@ public class ShoppingCart
 {
 	//Initialise fields
 	private ArrayList<Product> productList;
+	private double taxRate;
 	
+	/**
+	 * Default constructor with no parameters
+	 */
 	public ShoppingCart() 
 	{
 		this.productList = new ArrayList<Product>();
+		taxRate = 0;
+	}
+	
+	/**
+	 * @param Shopping cart tax rate
+	 * Constructor with tax rate parameter
+	 */
+	public ShoppingCart(double taxRate) 
+	{
+		this.productList = new ArrayList<Product>();
+		this.taxRate = taxRate;
+	}
+	
+	/**
+	 * @return shopping cart tax rate
+	 */
+	public double getTaxRate() 
+	{
+		return taxRate;
+	}
+	
+	/**
+	 * @return shopping cart tax amount
+	 */
+	public double getTaxAmount() 
+	{
+		double totalAmount = getTotalProductAmount() * 100;
+		
+		// Formats total price to 2dp
+		return get2dp((totalAmount * taxRate) / 10000);
+	}
+
+	/**
+	 * @param taxRate of shopping cart
+	 * Sets shopping cart tax rate
+	 */
+	public void setTaxRate(double taxRate) 
+	{
+		this.taxRate = taxRate;
 	}
 
 	/**
@@ -65,13 +108,13 @@ public class ShoppingCart
 			this.productList.add(product);
 		}
 	}
-
+	
 	/**
-	 * @return products total price 
+	 * @return products total amounts
 	 */
-	public Double getTotalPrice() 
+	private Double getTotalProductAmount() 
 	{
-		double totalPrice = 0;
+		double totalAmount = 0;
 		
 		// loop through unique product list to get total price
 		for(String name: getUniqueProducts())
@@ -80,11 +123,25 @@ public class ShoppingCart
 			int count = countProduct(name);
 			// Calculates price in cents
 			double price = product.getPrice() * 100 * count;
-			totalPrice += price;
+			totalAmount += price;
 		}
 		
+		// Formats total amount to 2dp
+		return get2dp(totalAmount / 100);
+	}
+
+	/**
+	 * @return products total price with tax rate
+	 */
+	public Double getTotalPrice() 
+	{
+		// Calculation in cents
+		double totalAmount = getTotalProductAmount() * 100;
+		
+		totalAmount += (getTaxAmount() * 100);
+		
 		// Formats total price to 2dp
-		return Double.parseDouble(new DecimalFormat("#.00").format(totalPrice/100));
+		return get2dp(totalAmount / 100);
 	}
 	
 	/**
@@ -146,5 +203,15 @@ public class ShoppingCart
 		return uniqueProducts;
 	}
 
-	
+	/**
+	 * @return two decimal point double with rounding up
+	 */
+	public double get2dp(double number) 
+	{
+        String dpNum = String.format("%.2f", Math.ceil(number * 10000) / 10000);
+
+        // Parse back to double:
+        return Double.parseDouble(dpNum);
+
+	}
 }

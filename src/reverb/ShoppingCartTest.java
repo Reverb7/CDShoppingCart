@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ShoppingCartTest 
 {
 	private ShoppingCart cart;
-	Product doveSoap, jergens, nivea;
+	Product doveSoap, jergens, nivea, axeDeo;
 
 	@Before
 	public void setUp() throws Exception 
@@ -17,6 +17,7 @@ public class ShoppingCartTest
 		doveSoap = new Product("Dove Soaps", 39.99);
 		jergens = new Product("Jergens Lotion", 40);
 		nivea = new Product("Nivea Lotion", 50);
+		axeDeo = new Product("Axe Deo", 99.99);
 	}
 
 	@After
@@ -117,6 +118,46 @@ public class ShoppingCartTest
 	}
 	
 	@Test
+	public void testGetTaxRate() 
+	{
+		cart = new ShoppingCart(12);
+		assertEquals(true, cart.getTaxRate() == 12);
+		
+		cart = new ShoppingCart();
+		cart.setTaxRate(18.4);
+		assertEquals(true, cart.getTaxRate() == 18.40);
+	}
+	
+	@Test
+	public void testGetTaxAmount() 
+	{
+		cart = new ShoppingCart(7.5);
+		cart.addProduct(jergens, 4);
+		assertEquals(true, cart.getTaxAmount() == 12);
+		
+		cart = new ShoppingCart();
+		cart.setTaxRate(17.3);
+		cart.addProduct(nivea, 9);
+		cart.addProduct(doveSoap);
+		assertEquals(true, cart.getTaxAmount() == 84.77);
+	}
+	
+	@Test
+	public void testTaxRate() 
+	{
+		cart = new ShoppingCart(13.1);
+		cart.addProduct(jergens, 4);
+		cart.addProduct(nivea, 2);
+		cart.addProduct(doveSoap, 4);
+		assertEquals(true, cart.getTaxAmount() == 55.01);
+		assertEquals(true, cart.getTotalPrice() == 474.97);
+		
+		cart.setTaxRate(0);
+		assertEquals(true, cart.getTaxAmount() == 0);
+		assertEquals(true, cart.getTotalPrice() == 419.96);
+	}
+	
+	@Test
 	public void testStep1() 
 	{
 		cart = new ShoppingCart();
@@ -137,6 +178,21 @@ public class ShoppingCartTest
 		assertEquals(true, doveSoap.getPrice() == 39.99);
 		assertEquals(8, cart.countProduct(doveSoap.getName()));
 		assertEquals(true, cart.getTotalPrice() == 319.92);
+	}
+	
+	@Test
+	public void testStep3() 
+	{
+		cart = new ShoppingCart(12.5);
+		cart.addProduct(doveSoap, 2);
+		cart.addProduct(axeDeo, 2);
+		
+		assertEquals(true, doveSoap.getPrice() == 39.99);
+		assertEquals(true, axeDeo.getPrice() == 99.99);
+		assertEquals(2, cart.countProduct(doveSoap.getName()));
+		assertEquals(2, cart.countProduct(axeDeo.getName()));
+		assertEquals(true, cart.getTaxAmount() == 35.00);
+		assertEquals(true, cart.getTotalPrice() == 314.96);
 	}
 
 }
