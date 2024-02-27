@@ -85,6 +85,7 @@ public class ShoppingCartTest
 		assertEquals(4, cart.countProduct(doveSoap.getName()));
 		assertEquals(8, cart.countProduct(jergens.getName()));
 		assertEquals(4, cart.countProduct(nivea.getName()));
+		cart.displayProducts();
 	}
 	
 	@Test
@@ -124,6 +125,18 @@ public class ShoppingCartTest
 		assertEquals(true, doveSoap.getPrice() == 39.99);
 		assertEquals(5, cart.countProduct(doveSoap.getName()));
 		assertEquals(true, cart.getTotalPrice() == 199.95);
+	}
+	
+	@Test
+	public void testStep2() 
+	{
+		cart = new ShoppingCart();
+		cart.addProduct(doveSoap, 5);
+		cart.addProduct(doveSoap, 3);
+		
+		assertEquals(true, doveSoap.getPrice() == 39.99);
+		assertEquals(8, cart.countProduct(doveSoap.getName()));
+		assertEquals(true, cart.getTotalPrice() == 319.92);
 	}
 
 }
