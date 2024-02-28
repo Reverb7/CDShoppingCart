@@ -44,11 +44,21 @@ public class ProductTest
 	@Test
 	public void testProductBuyXGetYFreeOffer() 
 	{
-		BuyXGetYFree offer = new BuyXGetYFree(4, 1);
-		jergens.setBuyXGetYFreeOffer(offer);
+		Offer offer = new BuyXGetYFree(4, 1);
+		jergens.setOffer(offer);
 		
-		assertEquals(4, jergens.getbuyXGetYFreeOffer().getRequirementQuan());
-		assertEquals(1, jergens.getbuyXGetYFreeOffer().getOfferQuan());
+		assertEquals(4, ((BuyXGetYFree)(jergens.getOffer())).getRequirementQuan());
+		assertEquals(1, ((BuyXGetYFree)(jergens.getOffer())).getOfferQuan());
+	}
+	
+	@Test
+	public void testProductBuyXGetYDiscountOnNextOne() 
+	{
+		Offer offer = new BuyXGetYDiscountOnNextOne(2, 55);
+		jergens.setOffer(offer);
+		
+		assertEquals(2, ((BuyXGetYDiscountOnNextOne)(jergens.getOffer())).getRequirementQuan());
+		assertEquals(55, ((BuyXGetYDiscountOnNextOne)(jergens.getOffer())).getOfferDiscount());
 	}
 
 }

@@ -6,7 +6,7 @@ public class Product
 	// Initialises field
 	private double price;
 	private String name;
-	private BuyXGetYFree buyXGetYFreeOffer;
+	private Offer offer;
 	
 	/**
 	 * @param product price 
@@ -17,7 +17,7 @@ public class Product
 	{
 		this.price = price;
 		this.name = name;
-		this.buyXGetYFreeOffer = null;
+		this.offer = null;
 	}
 
 	/**
@@ -61,18 +61,18 @@ public class Product
 	 * @return product BuyXGetYFree offer
 	 * 
 	 */
-	public BuyXGetYFree getbuyXGetYFreeOffer() 
+	public Offer getOffer() 
 	{
-		return this.buyXGetYFreeOffer;
+		return this.offer;
 	}
 
 	/**
 	 * @param product BuyXGetYFree offer
 	 * Sets product BuyXGetYFree offer
 	 */
-	public void setBuyXGetYFreeOffer(BuyXGetYFree buyXGetYFreeOffer) 
+	public void setOffer(Offer offer) 
 	{
-		this.buyXGetYFreeOffer = buyXGetYFreeOffer;
+		this.offer = offer;
 	}
 
 	

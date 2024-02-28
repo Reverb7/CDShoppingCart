@@ -19,6 +19,9 @@ public class ShoppingCartApp
 		cart.addProduct(jergens);
 		cart.addProduct(jergens);
 		cart.displayProducts();
+		
+		
+		
 
 	}
 	

@@ -1,6 +1,6 @@
 package reverb;
 
-public class BuyXGetYFree 
+public class BuyXGetYFree implements Offer
 {
 	// Initial fields
 	private int requirementQuan, offerQuan;

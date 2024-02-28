@@ -1,7 +1,7 @@
 package reverb;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+
 
 public class ShoppingCart 
 {
@@ -39,12 +39,12 @@ public class ShoppingCart
 	/**
 	 * @return shopping cart tax amount
 	 */
-	public double getTaxAmount() 
+	public double getTaxAmount(boolean to2Dp) 
 	{
 		double totalAmount = getTotalProductAmount() * 100;
 		
-		// Formats total price to 2dp
-		return get2dp((totalAmount * taxRate) / 10000);
+		// returns tax amount
+		return to2Dp ? get2dp((totalAmount * taxRate) / 10000) : (totalAmount * taxRate) / 10000;
 	}
 
 	/**
@@ -121,24 +121,41 @@ public class ShoppingCart
 		for(String name: getUniqueProducts())
 		{
 			Product product = getProduct(name);
-			int count = countProduct(name);
+			double count = countProduct(name);
 			double price = 0;
-			BuyXGetYFree offer = product.getbuyXGetYFreeOffer();
+			Offer offer = product.getOffer();
 			
-			// Checks product has an offer
-			if(offer != null && count >= offer.getRequirementQuan())
+			// Checks product has an offer and offer instance
+			if(offer != null && offer instanceof BuyXGetYFree)
 			{
-				// Applies offer
-				count -= offer.getOfferQuan();
+				BuyXGetYFree newOffer = (BuyXGetYFree)(product.getOffer());
+				
+				// Checks offer requirement is met
+				if(count >= newOffer.getRequirementQuan())
+				{
+					// Applies offer
+					count -= newOffer.getOfferQuan();
+				}
+			}
+			else if (offer != null && offer instanceof BuyXGetYDiscountOnNextOne)
+			{
+				BuyXGetYDiscountOnNextOne newOffer = (BuyXGetYDiscountOnNextOne)(product.getOffer());
+				
+				// Checks offer requirement is met
+				if(count > newOffer.getRequirementQuan())
+				{
+					// Applies offer
+					count -= newOffer.getOfferDiscount() / 100.0;
+				}
 			}
 			
 			// Calculates price in cents
-			price = product.getPrice() * 100 * count;
+			price = product.getPrice() * 100.0 * count;
 			totalAmount += price;
 		}
 		
-		// Formats total amount to 2dp
-		return get2dp(totalAmount / 100);
+		// Formats total amount
+		return (totalAmount / 100);
 	}
 
 	/**
@@ -148,9 +165,11 @@ public class ShoppingCart
 	{
 		// Calculation in cents
 		double totalAmount = getTotalProductAmount() * 100;
+		//System.out.println(getTotalProductAmount() + " count Total1");
 		
-		totalAmount += (getTaxAmount() * 100);
+		totalAmount += (getTaxAmount(false) * 100);
 		
+		//System.out.println(totalAmount + " count Total");
 		// Formats total price to 2dp
 		return get2dp(totalAmount / 100);
 	}
@@ -219,7 +238,7 @@ public class ShoppingCart
 	 */
 	public double get2dp(double number) 
 	{
-        String dpNum = String.format("%.2f", Math.ceil(number * 10000) / 10000);
+        String dpNum = String.format("%.2f", Math.ceil(number * 100000) / 100000);
 
         // Parse back to double:
         return Double.parseDouble(dpNum);
@@ -237,21 +256,41 @@ public class ShoppingCart
 		for(String name: getUniqueProducts())
 		{
 			Product product = getProduct(name);
-			int count = countProduct(name);
-			BuyXGetYFree offer = product.getbuyXGetYFreeOffer();
+			double count = countProduct(name);
+			Offer offer = product.getOffer();
 			
-			// Checks product has an offer
-			if(offer != null && count >= offer.getRequirementQuan())
+			// Checks product has an offer and offer instance
+			if(offer != null && offer instanceof BuyXGetYFree)
 			{
-				// Calculates discounts in cents
-				totalDiscount += product.getPrice() * 100 * offer.getOfferQuan();
+				BuyXGetYFree newOffer = (BuyXGetYFree)(product.getOffer());
+				
+				// Checks offer requirement is met
+				if(count >= newOffer.getRequirementQuan())
+				{
+					// Applies offer
+					//count -= newOffer.getOfferQuan();
+					totalDiscount += product.getPrice() * 100 * newOffer.getOfferQuan();
+				}
+			}
+			else if (offer != null && offer instanceof BuyXGetYDiscountOnNextOne)
+			{
+				BuyXGetYDiscountOnNextOne newOffer = (BuyXGetYDiscountOnNextOne)(product.getOffer());
+				
+				// Checks offer requirement is met
+				if(count > newOffer.getRequirementQuan())
+				{
+					// Applies offer
+					//count -= newOffer.getOfferDiscount() / 100.0;
+					totalDiscount += product.getPrice() * newOffer.getOfferDiscount();
+					System.out.println(product.getPrice() * newOffer.getOfferDiscount() + " count dis");
+				}
 			}
 			
 			
 		}
 		
 		// Formats total amount to 2dp
-		totalDiscount =  totalDiscount == 0 ? 0 : get2dp(totalDiscount/100);
-		return totalDiscount;
+		return totalDiscount == 0 ? 0 : get2dp(totalDiscount/100);
+		
 	}
 }
