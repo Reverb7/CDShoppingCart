@@ -83,6 +83,7 @@ public class ShoppingCart
 		//Calculates total price
 		System.out.println();
 		System.out.println("Total Price: £" + getTotalPrice());
+		System.out.println("Total Discount: £" + getTotalDiscount());
 		System.out.println();
 		System.out.println("***--------------------***");
 
@@ -121,8 +122,18 @@ public class ShoppingCart
 		{
 			Product product = getProduct(name);
 			int count = countProduct(name);
+			double price = 0;
+			BuyXGetYFree offer = product.getbuyXGetYFreeOffer();
+			
+			// Checks product has an offer
+			if(offer != null && count >= offer.getRequirementQuan())
+			{
+				// Applies offer
+				count -= offer.getOfferQuan();
+			}
+			
 			// Calculates price in cents
-			double price = product.getPrice() * 100 * count;
+			price = product.getPrice() * 100 * count;
 			totalAmount += price;
 		}
 		
@@ -213,5 +224,34 @@ public class ShoppingCart
         // Parse back to double:
         return Double.parseDouble(dpNum);
 
+	}
+	
+	/**
+	 * @return shopping cart total discount
+	 */
+	public double getTotalDiscount() 
+	{
+		double totalDiscount = 0;
+		
+		// loop through unique product list to get total price
+		for(String name: getUniqueProducts())
+		{
+			Product product = getProduct(name);
+			int count = countProduct(name);
+			BuyXGetYFree offer = product.getbuyXGetYFreeOffer();
+			
+			// Checks product has an offer
+			if(offer != null && count >= offer.getRequirementQuan())
+			{
+				// Calculates discounts in cents
+				totalDiscount += product.getPrice() * 100 * offer.getOfferQuan();
+			}
+			
+			
+		}
+		
+		// Formats total amount to 2dp
+		totalDiscount =  totalDiscount == 0 ? 0 : get2dp(totalDiscount/100);
+		return totalDiscount;
 	}
 }

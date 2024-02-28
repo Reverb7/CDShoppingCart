@@ -1,10 +1,12 @@
 package reverb;
 
+
 public class Product 
 {
 	// Initialises field
 	private double price;
 	private String name;
+	private BuyXGetYFree buyXGetYFreeOffer;
 	
 	/**
 	 * @param product price 
@@ -15,6 +17,7 @@ public class Product
 	{
 		this.price = price;
 		this.name = name;
+		this.buyXGetYFreeOffer = null;
 	}
 
 	/**
@@ -54,6 +57,23 @@ public class Product
 	}
 	
 	
+	/**
+	 * @return product BuyXGetYFree offer
+	 * 
+	 */
+	public BuyXGetYFree getbuyXGetYFreeOffer() 
+	{
+		return this.buyXGetYFreeOffer;
+	}
+
+	/**
+	 * @param product BuyXGetYFree offer
+	 * Sets product BuyXGetYFree offer
+	 */
+	public void setBuyXGetYFreeOffer(BuyXGetYFree buyXGetYFreeOffer) 
+	{
+		this.buyXGetYFreeOffer = buyXGetYFreeOffer;
+	}
 
 	
 }

@@ -40,5 +40,15 @@ public class ProductTest
 		assertEquals(true, doveSoap.getPrice() == 39.99);
 		assertEquals(true, jergens.getPrice() == 40.00);
 	}
+	
+	@Test
+	public void testProductBuyXGetYFreeOffer() 
+	{
+		BuyXGetYFree offer = new BuyXGetYFree(4, 1);
+		jergens.setBuyXGetYFreeOffer(offer);
+		
+		assertEquals(4, jergens.getbuyXGetYFreeOffer().getRequirementQuan());
+		assertEquals(1, jergens.getbuyXGetYFreeOffer().getOfferQuan());
+	}
 
 }
