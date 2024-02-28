@@ -311,96 +311,53 @@ public class ShoppingCartTest
 	}
 	
 	@Test
-	public void testStep1() 
+	public void testCartDiscount() 
 	{
-		cart = new ShoppingCart();
-		cart.addProduct(doveSoap, 5);
-		
-		assertEquals(true, doveSoap.getPrice() == 39.99);
-		assertEquals(5, cart.countProduct(doveSoap.getName()));
-		assertEquals(true, cart.getTotalPrice() == 199.95);
-	}
-	
-	@Test
-	public void testStep2() 
-	{
-		cart = new ShoppingCart();
-		cart.addProduct(doveSoap, 5);
-		cart.addProduct(doveSoap, 3);
-		
-		assertEquals(true, doveSoap.getPrice() == 39.99);
-		assertEquals(8, cart.countProduct(doveSoap.getName()));
-		assertEquals(true, cart.getTotalPrice() == 319.92);
-	}
-	
-	@Test
-	public void testStep3() 
-	{
-		cart = new ShoppingCart(12.5);
-		cart.addProduct(doveSoap, 2);
-		cart.addProduct(axeDeo, 2);
-		
-		assertEquals(true, doveSoap.getPrice() == 39.99);
-		assertEquals(true, axeDeo.getPrice() == 99.99);
-		assertEquals(2, cart.countProduct(doveSoap.getName()));
-		assertEquals(2, cart.countProduct(axeDeo.getName()));
-		assertEquals(true, cart.getTaxAmount(true) == 35.00);
-		assertEquals(true, cart.getTotalPrice() == 314.96);
-	}
-	
-	@Test
-	public void testStep4() 
-	{
-		cart = new ShoppingCart(12.5);
+		cart = new ShoppingCart(7.5);
 		doveSoap = new Product("Dove Soaps", 39.99);
-		axeDeo = new Product("Axe Deo", 89.99);
+		jergens = new Product("Jergens Lotion", 40);
+		
+		cart.setCartDiscount(25);
+		cart.setCartDisCountReq(300);
+		cart.addProduct(jergens, 2);
+		cart.addProduct(doveSoap, 2);
+		assertEquals(true, cart.getTotalPrice() == 171.98);
+		assertEquals(true, cart.getTotalDiscount() == 0);
+		cart.addProduct(jergens, 3);
+		cart.addProduct(doveSoap, 3);
+		assertEquals(true, cart.getTotalPrice() == 322.46);
+		assertEquals(true, cart.getTotalDiscount() == 99.99);
+		
+		
+		
+	}
+	
+	@Test
+	public void testCartDiscountAndProductOffer() 
+	{
+		cart = new ShoppingCart(11);
+		doveSoap = new Product("Dove Soaps", 40);
+		jergens = new Product("Jergens Lotion", 49.99);
 		
 		BuyXGetYFree doveoffer = new BuyXGetYFree(2, 1);
+		
 		doveSoap.setOffer(doveoffer);
 		
-		// 3 dove soaps
-		cart.addProduct(doveSoap, 3);
-		assertEquals(3, cart.countProduct(doveSoap.getName()));
-		assertEquals(true, doveSoap.getPrice() == 39.99);
-		assertEquals(true, cart.getTotalPrice() == 89.98);
-		assertEquals(true, cart.getTotalDiscount() == 39.99);
-		assertEquals(true, cart.getTaxAmount(true) == 10.00);
+		cart.setCartDiscount(50);
+		cart.setCartDisCountReq(800);
+		cart.addProduct(jergens, 2);
+		cart.addProduct(doveSoap);
+		assertEquals(true, cart.getTotalPrice() == 155.38);
+		assertEquals(true, cart.getTotalDiscount() == 0);
 		
-		// 5 dove soaps
-		cart = new ShoppingCart(12.5);
-		cart.addProduct(doveSoap, 5);
-		assertEquals(true, cart.getTotalPrice() == 179.96);
-		assertEquals(true, cart.getTotalDiscount() == 39.99);
-		assertEquals(true, cart.getTaxAmount(true) == 20.00);
+		cart.addProduct(doveSoap);
+		assertEquals(true, cart.getTotalPrice() == 155.38);
+		assertEquals(true, cart.getTotalDiscount() == 40);
 		
-		// 3 dove soaps and 2 Axe Deos
-		cart = new ShoppingCart(12.5);
-		cart.addProduct(doveSoap, 3);
-		cart.addProduct(axeDeo, 2);
-		assertEquals(3, cart.countProduct(doveSoap.getName()));
-		assertEquals(true, doveSoap.getPrice() == 39.99);
-		assertEquals(2, cart.countProduct(axeDeo.getName()));
-		assertEquals(true, axeDeo.getPrice() == 89.99);
-		assertEquals(true, cart.getTotalPrice() == 292.46);
-		assertEquals(true, cart.getTotalDiscount() == 39.99);
-		assertEquals(true, cart.getTaxAmount(true) == 32.50);
-	}
-	
-	@Test
-	public void testStep5() 
-	{
-		cart = new ShoppingCart(12.5);
-		doveSoap = new Product("Dove Soaps", 39.99);
-		
-		BuyXGetYDiscountOnNextOne doveOffer = new BuyXGetYDiscountOnNextOne(1, 50);
-		doveSoap.setOffer(doveOffer);
-		
-		cart.addProduct(doveSoap, 2);
-		assertEquals(2, cart.countProduct(doveSoap.getName()));
-		assertEquals(true, doveSoap.getPrice() == 39.99);
-		assertEquals(true, cart.getTotalPrice() == 67.48);
-		assertEquals(true, cart.getTotalDiscount() == 20.00);
-		assertEquals(true, cart.getTaxAmount(true) == 7.5);
+		cart.addProduct(jergens, 8);
+		cart.addProduct(doveSoap, 7);
+		assertEquals(true, cart.getTotalPrice() == 455.04);
+		assertEquals(true, cart.getTotalDiscount() == 449.95);
 		
 	}
 

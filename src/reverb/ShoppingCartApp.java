@@ -6,10 +6,8 @@ public class ShoppingCartApp
 
 	public static void main(String[] args) 
 	{
-		// TODO Auto-generated method stub
-		System.out.println("Working");
 		
-		ShoppingCart cart = new ShoppingCart();
+		ShoppingCart cart = new ShoppingCart(10);
 		Product doveSoap = new Product("Dove Soaps", 39.99);
 		Product niveaSoap = new Product("Nivea Soaps", 50);
 		Product jergens = new Product("Jergens Lotion", 40);
@@ -19,7 +17,6 @@ public class ShoppingCartApp
 		cart.addProduct(jergens);
 		cart.addProduct(jergens);
 		cart.displayProducts();
-		
 		
 		
 

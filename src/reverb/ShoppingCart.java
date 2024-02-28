@@ -7,7 +7,9 @@ public class ShoppingCart
 {
 	//Initialise fields
 	private ArrayList<Product> productList;
-	private double taxRate;
+	private double taxRate, cartDisCountReq;
+	// In percent
+	private int cartDiscount;
 	
 	/**
 	 * Default constructor with no parameters
@@ -16,6 +18,8 @@ public class ShoppingCart
 	{
 		this.productList = new ArrayList<Product>();
 		taxRate = 0;
+		cartDiscount = 0;
+		cartDisCountReq = 0;
 	}
 	
 	/**
@@ -24,7 +28,7 @@ public class ShoppingCart
 	 */
 	public ShoppingCart(double taxRate) 
 	{
-		this.productList = new ArrayList<Product>();
+		this();
 		this.taxRate = taxRate;
 	}
 	
@@ -36,6 +40,38 @@ public class ShoppingCart
 		return taxRate;
 	}
 	
+	/**
+	 * @return shopping cart Discount requirement
+	 */
+	public double getCartDisCountReq() 
+	{
+		return cartDisCountReq;
+	}
+
+	/**
+	 * @param shopping cart discount requirement
+	 */
+	public void setCartDisCountReq(double cartDisCountReq) 
+	{
+		this.cartDisCountReq = cartDisCountReq;
+	}
+
+	/**
+	 * @return shopping cart discount
+	 */
+	public int getCartDiscount() 
+	{
+		return cartDiscount;
+	}
+
+	/**
+	 * @param shopping cart discount
+	 */
+	public void setCartDiscount(int cartDiscount) 
+	{
+		this.cartDiscount = cartDiscount;
+	}
+
 	/**
 	 * @return shopping cart tax amount
 	 */
@@ -84,6 +120,7 @@ public class ShoppingCart
 		System.out.println();
 		System.out.println("Total Price: £" + getTotalPrice());
 		System.out.println("Total Discount: £" + getTotalDiscount());
+		System.out.println("Tax Amount: £" + getTaxAmount(true));
 		System.out.println();
 		System.out.println("***--------------------***");
 
@@ -111,9 +148,32 @@ public class ShoppingCart
 	}
 	
 	/**
-	 * @return products total amounts
+	 * @return products total amounts with discount
 	 */
 	private Double getTotalProductAmount() 
+	{
+		double totalAmount = getTotalProductAmountNoDis();
+		
+		// Checks discount condition is met
+		if(cartDiscount > 0 && totalAmount >= cartDisCountReq * 100)
+		{
+			//Applies discount before tax rate
+			totalAmount *= 100 - cartDiscount;
+			// Formats total amount
+			return (totalAmount / 10000);
+		}
+		else
+		{
+			// Formats total amount
+			return (totalAmount / 100);
+		}
+		
+	}
+	
+	/**
+	 * @return products total amounts with no discounts
+	 */
+	private Double getTotalProductAmountNoDis() 
 	{
 		double totalAmount = 0;
 		
@@ -155,7 +215,8 @@ public class ShoppingCart
 		}
 		
 		// Formats total amount
-		return (totalAmount / 100);
+		return totalAmount;
+		
 	}
 
 	/**
@@ -165,11 +226,9 @@ public class ShoppingCart
 	{
 		// Calculation in cents
 		double totalAmount = getTotalProductAmount() * 100;
-		//System.out.println(getTotalProductAmount() + " count Total1");
 		
 		totalAmount += (getTaxAmount(false) * 100);
 		
-		//System.out.println(totalAmount + " count Total");
 		// Formats total price to 2dp
 		return get2dp(totalAmount / 100);
 	}
@@ -282,11 +341,19 @@ public class ShoppingCart
 					// Applies offer
 					//count -= newOffer.getOfferDiscount() / 100.0;
 					totalDiscount += product.getPrice() * newOffer.getOfferDiscount();
-					System.out.println(product.getPrice() * newOffer.getOfferDiscount() + " count dis");
 				}
 			}
 			
 			
+		}
+		
+		double totalAmount = getTotalProductAmountNoDis();	
+		// Checks discount condition is met
+		if(cartDiscount > 0 && totalAmount >= cartDisCountReq * 100)
+		{
+			//Applies discount to total discount
+			totalDiscount += (totalAmount * cartDiscount)/100;
+			// Formats total amount
 		}
 		
 		// Formats total amount to 2dp
